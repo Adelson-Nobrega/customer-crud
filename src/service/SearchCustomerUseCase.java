@@ -1,0 +1,17 @@
+package br.ada.tech.class1583.service;
+
+import br.ada.tech.class1583.model.Customer;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface SearchCustomerUseCase {
+
+    Optional<Customer> findById(Long id);
+
+    List<Customer> list();
+
+    List<Customer> searchByName(String name);
+
+    List<Customer> searchByDocument(String document);
+}

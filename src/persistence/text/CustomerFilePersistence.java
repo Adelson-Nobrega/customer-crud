@@ -1,10 +1,7 @@
 package br.ada.tech.class1583.persistence.text;
 
 import br.ada.tech.class1583.model.Customer;
-import br.ada.tech.class1583.persistence.Reader;
-import br.ada.tech.class1583.persistence.SearchByDocument;
-import br.ada.tech.class1583.persistence.SearchByName;
-import br.ada.tech.class1583.persistence.Writer;
+import br.ada.tech.class1583.persistence.*;
 
 import java.nio.file.Files;
 import java.time.LocalDate;
@@ -14,7 +11,7 @@ import java.util.stream.Stream;
 
 public class CustomerFilePersistence extends TextFile
         implements Writer<Customer>, Reader<Customer>,
-                   SearchByName<Customer>, SearchByDocument<Customer> {
+                   SearchByName<Customer>, SearchByDocument<Customer>, Eraser<Customer> {
 
     private static final String ROOT_FOLDER = "./database/customers";
     private static final Function<String, Customer> READ_CONVERTER = (fileContent) -> {
@@ -90,5 +87,10 @@ public class CustomerFilePersistence extends TextFile
     public Stream<Customer> searchDocument(String document) {
         return read()
                 .filter(customer -> customer.getDocument().equals(document));
+    }
+
+    @Override
+    public void delete(Long id) {
+        super.deleteFile(id.toString());
     }
 }

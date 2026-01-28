@@ -1,6 +1,7 @@
 package br.ada.tech.class1583.view;
 
 import br.ada.tech.class1583.model.Customer;
+import br.ada.tech.class1583.service.EraserCustomerUseCase;
 import br.ada.tech.class1583.service.RegisterCustomerUseCase;
 import br.ada.tech.class1583.service.SearchCustomerUseCase;
 
@@ -12,11 +13,14 @@ public class CustomerView {
 
     private SearchCustomerUseCase searchUseCase;
     private RegisterCustomerUseCase registerUseCase;
+    private EraserCustomerUseCase eraserUseCase;
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    public CustomerView(SearchCustomerUseCase searchUseCase, RegisterCustomerUseCase registerUseCase) {
+    public CustomerView(SearchCustomerUseCase searchUseCase, RegisterCustomerUseCase registerUseCase,
+                        EraserCustomerUseCase eraserUseCase) {
         this.searchUseCase = searchUseCase;
         this.registerUseCase = registerUseCase;
+        this.eraserUseCase = eraserUseCase;
     }
 
     public void show() {
@@ -33,11 +37,12 @@ public class CustomerView {
         do {
             System.out.println("Escolha uma opção");
             System.out.println("0 - Sair");
-            System.out.println("1 - Cadastrar");
+            System.out.println("1 - Cadastrar cliente");
             System.out.println("2 - Consultar por id");
             System.out.println("3 - Listar todos");
             System.out.println("4 - Buscar por nome");
             System.out.println("5 - Buscar por documento");
+            System.out.println("6 - Excluir cliente");
             option = scanner.nextLine();
             switch (option) {
                 case "0" -> System.out.println("Até mais....");
@@ -46,7 +51,8 @@ public class CustomerView {
                 case "3" -> showAllCustomer();
                 case "4" -> searchByName(scanner);
                 case "5" -> searchByDocument(scanner);
-                default -> System.out.println("Invalid option. Try again");
+                case "6" -> deleteCustomer(scanner);
+                default -> System.out.println("Opção inválida! Tente novamente");
             }
         } while (!option.equalsIgnoreCase("0"));
     }
@@ -124,5 +130,11 @@ public class CustomerView {
         } else {
             customers.forEach(this::printCustomer);
         }
+    }
+
+    private void deleteCustomer(Scanner scanner) {
+        System.out.println("Informe o id do cliente");
+        var id = Long.parseLong(scanner.nextLine());
+        eraserUseCase.delete(id);
     }
 }

@@ -13,8 +13,9 @@ public class SystemMain {
                                     customerPersistence,
                                     customerPersistence,
                                     customerPersistence,
+                                    customerPersistence,
                                     customerPersistence);
-        var view = new CustomerView(customerService, customerService);
+        var view = new CustomerView(customerService, customerService, customerService);
         view.show();
     }
 

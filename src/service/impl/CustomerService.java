@@ -1,10 +1,8 @@
 package br.ada.tech.class1583.service.impl;
 
 import br.ada.tech.class1583.model.Customer;
-import br.ada.tech.class1583.persistence.Reader;
-import br.ada.tech.class1583.persistence.SearchByDocument;
-import br.ada.tech.class1583.persistence.SearchByName;
-import br.ada.tech.class1583.persistence.Writer;
+import br.ada.tech.class1583.persistence.*;
+import br.ada.tech.class1583.service.EraserCustomerUseCase;
 import br.ada.tech.class1583.service.RegisterCustomerUseCase;
 import br.ada.tech.class1583.service.SearchCustomerUseCase;
 
@@ -12,21 +10,25 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-public class CustomerService implements RegisterCustomerUseCase, SearchCustomerUseCase {
+public class CustomerService implements RegisterCustomerUseCase, SearchCustomerUseCase,
+        EraserCustomerUseCase {
 
     private Writer<Customer> customerWriter;
     private Reader<Customer> customerReader;
     private SearchByName<Customer> customerSearchByName;
     private SearchByDocument<Customer> customerSearchByDocument;
+    private Eraser<Customer> customerEraser;
 
     public CustomerService(Writer<Customer> customerWriter,
                            Reader<Customer> customerReader,
                            SearchByName<Customer> customerSearchByName,
-                           SearchByDocument<Customer> customerSearchByDocument) {
+                           SearchByDocument<Customer> customerSearchByDocument,
+                           Eraser<Customer> customerEraser){
         this.customerWriter = customerWriter;
         this.customerReader = customerReader;
         this.customerSearchByName = customerSearchByName;
         this.customerSearchByDocument = customerSearchByDocument;
+        this.customerEraser = customerEraser;
     }
 
     @Override
@@ -72,4 +74,12 @@ public class CustomerService implements RegisterCustomerUseCase, SearchCustomerU
                 .toList();
     }
 
+    @Override
+    public void delete(Long id) {
+        var customer = findById(id);
+        if (customer.isEmpty()) {
+            System.out.println("ID do cliente não encontrado!");
+        }
+        customerEraser.delete(id);
+    }
 }

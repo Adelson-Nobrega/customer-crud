@@ -63,4 +63,12 @@ public class TextFile {
         }
     }
 
+    public void deleteFile(String fileName) {
+        try {
+            var file = Paths.get(rootFolder, fileName + EXTENSION);
+            Files.deleteIfExists(file);
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
 }
